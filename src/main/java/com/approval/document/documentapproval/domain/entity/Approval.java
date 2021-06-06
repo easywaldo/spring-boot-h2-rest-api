@@ -1,5 +1,6 @@
 package com.approval.document.documentapproval.domain.entity;
 
+import com.approval.document.documentapproval.dto.document.DocumentConfirmRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,5 +48,10 @@ public class Approval {
         this.comment = comment;
         this.order = order;
         this.isConfirm = isConfirm;
+    }
+
+    public void confirmDocument(DocumentConfirmRequestDto requestDto) {
+        this.isApproved = requestDto.isApproved();
+        this.isConfirm = true;
     }
 }
