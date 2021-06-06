@@ -31,20 +31,21 @@ public class Approval {
     @Column(name = "document_id")
     private Integer documentId;
 
+    @Column(name = "is_confirm")
+    private boolean isConfirm;
+
     @Builder
     public Approval(Integer documentId,
                     String userId,
                     boolean isApproved,
                     String comment,
-                    int order) {
+                    int order,
+                    boolean isConfirm) {
         this.documentId = documentId;
         this.userId = userId;
         this.isApproved = isApproved;
         this.comment = comment;
         this.order = order;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
+        this.isConfirm = isConfirm;
     }
 }

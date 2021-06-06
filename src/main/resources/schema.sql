@@ -15,7 +15,8 @@ create table document_approval (
                                    is_approved boolean not null default false,
                                    comment varchar(300),
                                    approval_order integer not null,
-                                   document_id bigint not null
+                                   document_id bigint not null,
+                                   is_confirm boolean not null default false
 
 );
 
