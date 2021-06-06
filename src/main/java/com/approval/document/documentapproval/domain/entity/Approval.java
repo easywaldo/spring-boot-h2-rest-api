@@ -32,9 +32,15 @@ public class Approval {
     private Integer documentId;
 
     @Builder
-    public Approval(Integer documentId, String userId, int order) {
+    public Approval(Integer documentId,
+                    String userId,
+                    boolean isApproved,
+                    String comment,
+                    int order) {
         this.documentId = documentId;
         this.userId = userId;
+        this.isApproved = isApproved;
+        this.comment = comment;
         this.order = order;
     }
 }

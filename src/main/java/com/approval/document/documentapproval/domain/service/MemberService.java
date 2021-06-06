@@ -5,6 +5,7 @@ import com.approval.document.documentapproval.domain.entity.repository.MemberRep
 import com.approval.document.documentapproval.dto.member.ValidMemberRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MemberService {
@@ -16,6 +17,7 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = true)
     public boolean validUser(ValidMemberRequestDto requestDto) {
         Member member = this.memberRepository
             .findByUserId(requestDto.getUserId())

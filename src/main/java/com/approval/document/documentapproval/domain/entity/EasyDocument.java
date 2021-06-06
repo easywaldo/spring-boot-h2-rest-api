@@ -25,6 +25,9 @@ public class EasyDocument {
     @Column(name = "type")
     private DocumentType type;
 
+    @Column(name = "content")
+    private String content;
+
     @JsonIgnore
     @JoinColumn(name = "document_id")
     @OneToMany(fetch = FetchType.LAZY, targetEntity = Approval.class)
@@ -33,9 +36,11 @@ public class EasyDocument {
     @Builder
     public EasyDocument(Integer documentId,
                         String title,
+                        String content,
                         DocumentType type) {
         this.documentId = documentId;
         this.title = title;
+        this.content = content;
         this.type = type;
     }
 
