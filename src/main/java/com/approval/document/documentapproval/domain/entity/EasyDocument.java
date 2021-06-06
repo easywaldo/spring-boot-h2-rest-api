@@ -22,6 +22,7 @@ public class EasyDocument {
     @Column(name = "title")
     private String title;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private DocumentType type;
 
@@ -31,6 +32,7 @@ public class EasyDocument {
     @Column(name = "owner_id")
     private String ownerId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "document_status")
     private DocumentStatus documentStatus;
 

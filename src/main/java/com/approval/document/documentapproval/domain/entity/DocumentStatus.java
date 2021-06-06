@@ -1,13 +1,13 @@
 package com.approval.document.documentapproval.domain.entity;
 
 public enum DocumentStatus {
-    ING("ING"),
-    NOT_APPROVED("NOT_APPROVED"),
-    ALL_APPROVED("ALL_APPROVED");
+    ING(0),
+    NOT_APPROVED(1),
+    ALL_APPROVED(2);
 
-    private String documentStatus;
+    private int documentStatus;
 
-    DocumentStatus(String documentStatus) {
+    DocumentStatus(int documentStatus) {
         this.documentStatus = documentStatus;
     }
 }

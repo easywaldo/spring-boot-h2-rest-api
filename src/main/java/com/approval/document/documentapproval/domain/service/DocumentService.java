@@ -4,11 +4,14 @@ import com.approval.document.documentapproval.domain.entity.DocumentStatus;
 import com.approval.document.documentapproval.domain.entity.repository.ApprovalRepository;
 import com.approval.document.documentapproval.domain.entity.repository.EasyDocumentRepository;
 import com.approval.document.documentapproval.dto.document.CreateDocumentRequestDto;
+import com.approval.document.documentapproval.dto.document.DocumentAggregationDto;
 import com.approval.document.documentapproval.dto.document.DocumentConfirmRequestDto;
 import com.approval.document.documentapproval.dto.document.DocumentQueryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class DocumentService {
@@ -27,7 +30,7 @@ public class DocumentService {
 
     @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = false)
     public Integer createDocument(CreateDocumentRequestDto createDocumentRequestDto) {
-        var documentId = this.easyDocumentRepository.save(
+        var documentId = this.easyDocumentRepository.saveAndFlush(
             createDocumentRequestDto.toEasyDocumentEntity()).getDocumentId();
         this.approvalRepository.saveAll(
             createDocumentRequestDto.toApprovalList(documentId));
@@ -73,17 +76,29 @@ public class DocumentService {
             throw new IllegalArgumentException("이미 반려가 된 내역이 존재합니다.");
         }
 
-        var isLastApproval = documentQueryGenerator.selectDocumentViewModel(DocumentQueryDto
-            .builder()
-            .isLastCheck(true)
-            .documentId(requestDto.getDocumentId())
-            .approvedId(requestDto.getApprovalId())
-            .build()).isEmpty();
+        var isLastApproval = documentQueryGenerator.selectDocumentViewModel(
+            DocumentQueryDto
+                .builder()
+                .isLastCheck(true)
+                .documentId(requestDto.getDocumentId())
+                .approvedId(requestDto.getApprovalId())
+                .build()
+        ).isEmpty();
         var approvalResult = approval.get();
         approvalResult.confirmDocument(requestDto);
         document.get().updateState(
             isLastApproval && requestDto.isApproved() ? DocumentStatus.ALL_APPROVED : requestDto.isApproved() ? DocumentStatus.ING : DocumentStatus.NOT_APPROVED);
         approvalRepository.save(approvalResult);
         easyDocumentRepository.save(document.get());
+    }
+
+    @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = true)
+    public List<DocumentAggregationDto> selectOutBox(String ownerId) {
+        return documentQueryGenerator.selectOutBox(ownerId);
+    }
+
+    @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = true)
+    public List<DocumentAggregationDto> selectInBox(String approvalId) {
+        return documentQueryGenerator.selectInBox(approvalId);
     }
 }

@@ -4,6 +4,7 @@ import com.approval.document.documentapproval.domain.entity.ResponseStatus;
 import com.approval.document.documentapproval.domain.service.DocumentService;
 import com.approval.document.documentapproval.dto.CommonResponseDto;
 import com.approval.document.documentapproval.dto.document.CreateDocumentRequestDto;
+import com.approval.document.documentapproval.dto.document.DocumentAggregationDto;
 import com.approval.document.documentapproval.dto.document.DocumentConfirmRequestDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/document")
@@ -41,6 +44,24 @@ public class DocumentController {
         documentService.confirmDocument(requestDto);
         return new CommonResponseDto<>(
             ResponseStatus.RES_CODE_SUCCESS, "success", null);
+    }
+
+    @ApiOperation(value = "내가 생성한 문서 중 결재 진행 중인 문서", notes = "내가 생성한 문서 중 결재 진행 중인 문서를 조회한다.")
+    @PostMapping("/selectOutBox")
+    public CommonResponseDto<List<DocumentAggregationDto>> selectOutBox(@RequestBody String ownerId) {
+        List<DocumentAggregationDto> result =  documentService.selectOutBox(ownerId);
+        return new CommonResponseDto<>(
+            ResponseStatus.RES_CODE_SUCCESS, "success", result
+        );
+    }
+
+    @ApiOperation(value = "내가 결재를 해야 할 문서", notes = "내가 결재를 해야 할 문서를 조회한다.")
+    @PostMapping("/selectInBox")
+    public CommonResponseDto<List<DocumentAggregationDto>> selectInBox(@RequestBody String approvalId) {
+        List<DocumentAggregationDto> result =  documentService.selectInBox(approvalId);
+        return new CommonResponseDto<>(
+            ResponseStatus.RES_CODE_SUCCESS, "success", result
+        );
     }
 
 }

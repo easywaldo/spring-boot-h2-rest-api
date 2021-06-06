@@ -1,7 +1,9 @@
 package com.approval.document.documentapproval.domain.service;
 
+import com.approval.document.documentapproval.domain.entity.DocumentStatus;
 import com.approval.document.documentapproval.domain.entity.QApproval;
 import com.approval.document.documentapproval.domain.entity.QEasyDocument;
+import com.approval.document.documentapproval.dto.document.DocumentAggregationDto;
 import com.approval.document.documentapproval.dto.document.DocumentQueryDto;
 import com.approval.document.documentapproval.dto.document.DocumentViewModel;
 import com.querydsl.core.BooleanBuilder;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DocumentQueryGenerator {
@@ -65,32 +69,45 @@ public class DocumentQueryGenerator {
         return resultModel;
     }
 
-    public List<DocumentViewModel> selectMyDocumentViewModel(String ownerId) {
+    /**
+     * 내가 생성한 문서 중 결재 진행 중인 문서
+     * @param ownerId
+     * @return
+     */
+    public List<DocumentAggregationDto> selectOutBox(String ownerId) {
         QEasyDocument qEasyDocument = new QEasyDocument("qed");
         QApproval qApproval = new QApproval("qa");
 
         BooleanBuilder whereClause = new BooleanBuilder();
         whereClause.and(qEasyDocument.ownerId.eq(ownerId));
-        whereClause.and(qApproval.isConfirm.eq(false));
+        whereClause.and(qEasyDocument.documentStatus.eq(DocumentStatus.ING));
 
-        List<DocumentViewModel> resultModel = this.queryFactory.from(qEasyDocument)
+        List<DocumentViewModel> resultModel = this.queryFactory
+            .from(qEasyDocument)
             .join(qApproval).on(qApproval.documentId.eq(qEasyDocument.documentId))
             .where(whereClause)
             .select(Projections.fields(DocumentViewModel.class,
                 qEasyDocument.documentId,
+                qEasyDocument.ownerId,
                 qEasyDocument.title,
                 qEasyDocument.content,
                 qEasyDocument.type,
+                qEasyDocument.documentStatus,
                 qApproval.approvalId,
                 qApproval.userId,
                 qApproval.isConfirm,
                 qApproval.isApproved))
             .fetch();
 
-        return resultModel;
+        return convertAggregation(resultModel);
     }
 
-    public List<DocumentViewModel> selectMyConfrimTargetDocumentViewModel(String approvalId) {
+    /***
+     * 내가 결재를 해야 할 문서
+     * @param approvalId
+     * @return
+     */
+    public List<DocumentAggregationDto> selectInBox(String approvalId) {
         QEasyDocument qEasyDocument = new QEasyDocument("qed");
         QApproval qApproval = new QApproval("qa");
 
@@ -102,16 +119,45 @@ public class DocumentQueryGenerator {
             .where(whereClause)
             .select(Projections.fields(DocumentViewModel.class,
                 qEasyDocument.documentId,
+                qEasyDocument.ownerId,
                 qEasyDocument.title,
                 qEasyDocument.content,
                 qEasyDocument.type,
+                qEasyDocument.documentStatus,
                 qApproval.approvalId,
                 qApproval.userId,
                 qApproval.isConfirm,
                 qApproval.isApproved))
             .fetch();
 
-        return resultModel;
+        return convertAggregation(resultModel);
+    }
+
+    private List<DocumentAggregationDto> convertAggregation(List<DocumentViewModel> viewModel) {
+        var documentApproval = viewModel.stream()
+            .collect(Collectors.groupingBy(g -> g.getDocumentId(), Collectors.toList()));
+        List<DocumentAggregationDto> documentAggregationDto = new ArrayList<>();
+        for (var key : documentApproval.keySet()) {
+            documentAggregationDto.add(DocumentAggregationDto.builder()
+                .documentId(key)
+                .documentStatus(documentApproval.get(key).stream().findFirst().get().getDocumentStatus())
+                .content(documentApproval.get(key).stream().findFirst().get().getContent())
+                .title(documentApproval.get(key).stream().findFirst().get().getTitle())
+                .type(documentApproval.get(key).stream().findFirst().get().getType())
+                .ownerId(documentApproval.get(key).stream().findFirst().get().getOwnerId())
+                .approvalList(documentApproval.get(key)
+                    .stream()
+                    .map(m ->
+                        DocumentAggregationDto.ApprovalDto.builder()
+                            .approvalId(m.getApprovalId())
+                            .userId(m.getUserId())
+                            .isConfirm(m.isConfirm())
+                            .isApproved(m.isApproved())
+                            .build()
+                    ).collect(Collectors.toList()))
+                .build());
+        }
+        return documentAggregationDto;
     }
 
 }
