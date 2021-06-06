@@ -34,14 +34,18 @@ public class DocumentQueryGenerator {
         BooleanBuilder whereClause = new BooleanBuilder();
         whereClause.and(qEasyDocument.documentId.eq(queryDto.getDocumentId()));
 
-        if (queryDto.getApprovalId() > 0  && !queryDto.isPrevCheck()) {
+        if (queryDto.getApprovalId() > 0  && !queryDto.isPrevCheck() && !queryDto.isLastCheck()) {
             whereClause.and(qApproval.approvalId.lt(queryDto.getApprovalId()));
             whereClause.and(qApproval.isConfirm.eq(false));
         }
 
-        if (queryDto.getApprovalId() > 0 && queryDto.isPrevCheck()) {
+        if (queryDto.getApprovalId() > 0 && queryDto.isPrevCheck() && !queryDto.isLastCheck()) {
             whereClause.and(qApproval.approvalId.lt(queryDto.getApprovalId()));
             whereClause.and(qApproval.isApproved.eq(false));
+        }
+
+        if (queryDto.getApprovalId() > 0 && queryDto.isLastCheck()) {
+            whereClause.and(qApproval.approvalId.gt(queryDto.getApprovalId()));
         }
 
         List<DocumentViewModel> resultModel = this.queryFactory.from(qEasyDocument)

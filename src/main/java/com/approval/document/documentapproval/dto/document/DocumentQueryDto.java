@@ -12,13 +12,16 @@ public class DocumentQueryDto {
     private Integer documentId;
     private Integer approvalId;
     private boolean isPrevCheck;
+    private boolean isLastCheck;
 
     @Builder
     public DocumentQueryDto(Integer documentId,
                             Integer approvedId,
-                            boolean isPrevCheck) {
+                            boolean isPrevCheck,
+                            boolean isLastCheck) {
         this.documentId = documentId;
         this.approvalId = approvedId;
         this.isPrevCheck = isPrevCheck;
+        this.isLastCheck = isLastCheck;
     }
 }

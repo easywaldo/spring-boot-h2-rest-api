@@ -61,4 +61,9 @@ public class EasyDocument {
             .userId(userId)
             .order(order).build();
     }
+
+    @JsonIgnore
+    public void updateState(DocumentStatus documentStatus) {
+        this.documentStatus = documentStatus;
+    }
 }

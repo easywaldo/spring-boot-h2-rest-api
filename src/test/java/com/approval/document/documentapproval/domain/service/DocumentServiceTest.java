@@ -3,10 +3,13 @@ package com.approval.document.documentapproval.domain.service;
 import com.approval.document.documentapproval.domain.entity.Approval;
 import com.approval.document.documentapproval.domain.entity.DocumentType;
 import com.approval.document.documentapproval.domain.entity.repository.ApprovalRepository;
+import com.approval.document.documentapproval.domain.entity.repository.EasyDocumentRepository;
 import com.approval.document.documentapproval.dto.document.ApprovalLineDto;
 import com.approval.document.documentapproval.dto.document.CreateDocumentRequestDto;
 import com.approval.document.documentapproval.dto.document.DocumentConfirmRequestDto;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +29,16 @@ public class DocumentServiceTest {
     private DocumentService documentService;
 
     @Autowired
+    private EasyDocumentRepository easyDocumentRepository;
+
+    @Autowired
     private ApprovalRepository approvalRepository;
+
+    @Before
+    public void initData() {
+        approvalRepository.deleteAll();
+        easyDocumentRepository.deleteAll();
+    }
 
     @Test
     public void given_document_request_then_create_document_should_return_document_id() {
