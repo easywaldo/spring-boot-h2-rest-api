@@ -1,1 +1,1 @@
-select 1;
+INSERT INTO member (member_seq, member_name, user_id, user_pwd) VALUES (1, '이지남', 'easywaldo', '1234');
