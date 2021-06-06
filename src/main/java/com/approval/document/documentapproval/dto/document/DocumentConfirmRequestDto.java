@@ -10,16 +10,19 @@ public class DocumentConfirmRequestDto {
     private Integer approvalId;
     private Integer documentId;
     private String userId;
-    private boolean isApproved;
+    private boolean approved;
+    private String comment;
 
     @Builder
     public DocumentConfirmRequestDto(Integer approvalId,
                                      Integer documentId,
                                      String userId,
-                                     boolean isApproved) {
+                                     String comment,
+                                     boolean approved) {
         this.approvalId = approvalId;
         this.documentId = documentId;
         this.userId = userId;
-        this.isApproved = isApproved;
+        this.comment = comment;
+        this.approved = approved;
     }
 }

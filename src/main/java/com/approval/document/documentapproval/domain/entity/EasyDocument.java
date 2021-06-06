@@ -28,6 +28,9 @@ public class EasyDocument {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "owner_id")
+    private String ownerId;
+
     @JsonIgnore
     @JoinColumn(name = "document_id")
     @OneToMany(fetch = FetchType.LAZY, targetEntity = Approval.class)
@@ -37,10 +40,12 @@ public class EasyDocument {
     public EasyDocument(Integer documentId,
                         String title,
                         String content,
+                        String ownerId,
                         DocumentType type) {
         this.documentId = documentId;
         this.title = title;
         this.content = content;
+        this.ownerId = ownerId;
         this.type = type;
     }
 

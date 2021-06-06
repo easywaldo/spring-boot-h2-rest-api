@@ -53,8 +53,8 @@ public class DocumentServiceTest {
         assertThat(approvalLine.stream().filter(x -> approvalUsers.contains(x.getUserId())).count()).isEqualTo(2L);
     }
 
-    @Test
-    public void given_document_approval_confirm_request_then_confirm_service_should_update_approval_correctly() {
+    @Test(expected = IllegalArgumentException.class)
+    public void given_document_approval_confirm_request_with_un_confirmed_prev_user_then_confirm_service_should_throws_exception() {
         // arrange
         List<ApprovalLineDto> approvalLine = new ArrayList<>();
         approvalLine.add(ApprovalLineDto.builder()
@@ -77,15 +77,57 @@ public class DocumentServiceTest {
             .builder()
             .approvalId(approvalId)
             .documentId(documentId)
-            .isApproved(true)
+            .approved(true)
             .userId("myboss")
             .build();
         documentService.confirmDocument(requestDto);
 
         // assert
-        assertThat(approvalRepository.findById(approvalId).get().isApproved())
+    }
+
+    @Test
+    public void given_document_approval_confirm_request_with_all_confirmed_prev_user_then_confirm_service_should_update_correctly() {
+        // arrange
+        List<ApprovalLineDto> approvalLine = new ArrayList<>();
+        approvalLine.add(ApprovalLineDto.builder()
+            .userId("easywaldo").order(1).build());
+        approvalLine.add(ApprovalLineDto.builder()
+            .userId("myboss").order(2).build());
+
+        CreateDocumentRequestDto createDocumentRequestDto = CreateDocumentRequestDto.builder()
+            .documentTitle("교육신청서")
+            .documentType(DocumentType.EDUCATION_JOIN)
+            .documentContent("Event Driven Architecture And Domain Driven")
+            .approvalLine(approvalLine)
+            .build();
+
+        // act
+        var documentId = documentService.createDocument(createDocumentRequestDto);
+        List<Approval> approvalList = approvalRepository.findAllByDocumentId(documentId);
+        Integer firstApproval = approvalList.stream().filter(x -> x.getUserId().equals("easywaldo")).findFirst().get().getApprovalId();
+        DocumentConfirmRequestDto requestDto = DocumentConfirmRequestDto
+            .builder()
+            .approvalId(firstApproval)
+            .documentId(documentId)
+            .approved(true)
+            .userId("easywaldo")
+            .build();
+        documentService.confirmDocument(requestDto);
+
+        Integer secondApproval = approvalList.stream().filter(x -> x.getUserId().equals("myboss")).findFirst().get().getApprovalId();
+        requestDto = DocumentConfirmRequestDto
+            .builder()
+            .approvalId(secondApproval)
+            .documentId(documentId)
+            .approved(true)
+            .userId("myboss")
+            .build();
+        documentService.confirmDocument(requestDto);
+
+        // assert
+        assertThat(approvalRepository.findById(firstApproval).get().isApproved())
             .isEqualTo(true);
-        assertThat(approvalRepository.findById(approvalId).get().isConfirm())
+        assertThat(approvalRepository.findById(firstApproval).get().isConfirm())
             .isEqualTo(true);
     }
 }

@@ -53,5 +53,6 @@ public class Approval {
     public void confirmDocument(DocumentConfirmRequestDto requestDto) {
         this.isApproved = requestDto.isApproved();
         this.isConfirm = true;
+        this.comment = requestDto.getComment();
     }
 }

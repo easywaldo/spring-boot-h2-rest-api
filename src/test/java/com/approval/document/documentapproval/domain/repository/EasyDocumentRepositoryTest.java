@@ -30,6 +30,7 @@ public class EasyDocumentRepositoryTest {
             .title("구매요청서 입니다")
             .content("도서 블라블라 구매요청 드립니다.")
             .type(DocumentType.PRODUCT_PURCHASE)
+            .ownerId("easywaldo")
             .build();
 
         // act

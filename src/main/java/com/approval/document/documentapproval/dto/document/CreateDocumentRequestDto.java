@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +44,11 @@ public class CreateDocumentRequestDto {
             .title(this.documentTitle)
             .type(this.documentType)
             .content(this.documentContent)
+            .ownerId(this.approvalLine.stream().sorted(
+                    Comparator.comparing(ApprovalLineDto::getOrder))
+                .findFirst()
+                .get()
+                .getUserId())
             .build();
     }
 
