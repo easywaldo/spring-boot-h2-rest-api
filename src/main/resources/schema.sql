@@ -5,7 +5,8 @@ create table easy_document (
                                title varchar(100) not null,
                                type varchar(300) not null,
                                content varchar(2000) not null,
-                               owner_id varchar(100) not null
+                               owner_id varchar(100) not null,
+                               document_status varchar(150) not null
 );
 
 drop table document_approval if exists;

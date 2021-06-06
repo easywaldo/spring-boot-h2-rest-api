@@ -60,4 +60,54 @@ public class DocumentQueryGenerator {
 
         return resultModel;
     }
+
+    public List<DocumentViewModel> selectMyDocumentViewModel(String ownerId) {
+        QEasyDocument qEasyDocument = new QEasyDocument("qed");
+        QApproval qApproval = new QApproval("qa");
+
+        BooleanBuilder whereClause = new BooleanBuilder();
+        whereClause.and(qEasyDocument.ownerId.eq(ownerId));
+        whereClause.and(qApproval.isConfirm.eq(false));
+
+        List<DocumentViewModel> resultModel = this.queryFactory.from(qEasyDocument)
+            .join(qApproval).on(qApproval.documentId.eq(qEasyDocument.documentId))
+            .where(whereClause)
+            .select(Projections.fields(DocumentViewModel.class,
+                qEasyDocument.documentId,
+                qEasyDocument.title,
+                qEasyDocument.content,
+                qEasyDocument.type,
+                qApproval.approvalId,
+                qApproval.userId,
+                qApproval.isConfirm,
+                qApproval.isApproved))
+            .fetch();
+
+        return resultModel;
+    }
+
+    public List<DocumentViewModel> selectMyConfrimTargetDocumentViewModel(String approvalId) {
+        QEasyDocument qEasyDocument = new QEasyDocument("qed");
+        QApproval qApproval = new QApproval("qa");
+
+        BooleanBuilder whereClause = new BooleanBuilder();
+        whereClause.and(qApproval.userId.eq(approvalId));
+
+        List<DocumentViewModel> resultModel = this.queryFactory.from(qEasyDocument)
+            .join(qApproval).on(qApproval.documentId.eq(qEasyDocument.documentId))
+            .where(whereClause)
+            .select(Projections.fields(DocumentViewModel.class,
+                qEasyDocument.documentId,
+                qEasyDocument.title,
+                qEasyDocument.content,
+                qEasyDocument.type,
+                qApproval.approvalId,
+                qApproval.userId,
+                qApproval.isConfirm,
+                qApproval.isApproved))
+            .fetch();
+
+        return resultModel;
+    }
+
 }

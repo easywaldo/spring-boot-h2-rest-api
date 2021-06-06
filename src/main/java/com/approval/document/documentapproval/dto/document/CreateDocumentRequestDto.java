@@ -1,6 +1,7 @@
 package com.approval.document.documentapproval.dto.document;
 
 import com.approval.document.documentapproval.domain.entity.Approval;
+import com.approval.document.documentapproval.domain.entity.DocumentStatus;
 import com.approval.document.documentapproval.domain.entity.DocumentType;
 import com.approval.document.documentapproval.domain.entity.EasyDocument;
 import lombok.Builder;
@@ -49,6 +50,7 @@ public class CreateDocumentRequestDto {
                 .findFirst()
                 .get()
                 .getUserId())
+            .documentStatus(DocumentStatus.ING)
             .build();
     }
 

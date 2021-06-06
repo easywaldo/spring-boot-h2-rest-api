@@ -1,6 +1,7 @@
 package com.approval.document.documentapproval.domain.repository;
 
 import com.approval.document.documentapproval.domain.entity.Approval;
+import com.approval.document.documentapproval.domain.entity.DocumentStatus;
 import com.approval.document.documentapproval.domain.entity.DocumentType;
 import com.approval.document.documentapproval.domain.entity.EasyDocument;
 import com.approval.document.documentapproval.domain.entity.repository.ApprovalRepository;
@@ -31,6 +32,7 @@ public class EasyDocumentRepositoryTest {
             .content("도서 블라블라 구매요청 드립니다.")
             .type(DocumentType.PRODUCT_PURCHASE)
             .ownerId("easywaldo")
+            .documentStatus(DocumentStatus.ING)
             .build();
 
         // act
