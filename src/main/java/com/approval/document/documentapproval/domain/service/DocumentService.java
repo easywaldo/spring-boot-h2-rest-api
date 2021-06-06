@@ -23,7 +23,8 @@ public class DocumentService {
     public Integer createDocument(CreateDocumentRequestDto createDocumentRequestDto) {
         var documentId = this.easyDocumentRepository.save(
             createDocumentRequestDto.toEasyDocumentEntity()).getDocumentId();
-        this.approvalRepository.saveAll(createDocumentRequestDto.toApprovalList(documentId));
+        this.approvalRepository.saveAll(
+            createDocumentRequestDto.toApprovalList(documentId));
         return documentId;
     }
 }

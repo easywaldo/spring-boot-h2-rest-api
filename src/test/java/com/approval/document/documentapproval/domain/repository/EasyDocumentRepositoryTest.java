@@ -28,6 +28,7 @@ public class EasyDocumentRepositoryTest {
         // arrange
         var document = EasyDocument.builder()
             .title("구매요청서 입니다")
+            .content("도서 블라블라 구매요청 드립니다.")
             .type(DocumentType.PRODUCT_PURCHASE)
             .build();
 

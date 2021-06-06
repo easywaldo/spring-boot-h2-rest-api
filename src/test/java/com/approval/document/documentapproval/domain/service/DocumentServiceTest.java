@@ -31,8 +31,10 @@ public class DocumentServiceTest {
     public void given_document_request_then_create_document_should_return_document_id() {
         // arrange
         List<ApprovalLineDto> approvalLine = new ArrayList<>();
-        approvalLine.add(ApprovalLineDto.builder().userId("easywaldo").build());
-        approvalLine.add(ApprovalLineDto.builder().userId("myboss").build());
+        approvalLine.add(ApprovalLineDto.builder()
+            .userId("easywaldo").order(1).build());
+        approvalLine.add(ApprovalLineDto.builder()
+            .userId("myboss").order(2).build());
 
         CreateDocumentRequestDto createDocumentRequestDto = CreateDocumentRequestDto.builder()
             .documentTitle("교육신청서")

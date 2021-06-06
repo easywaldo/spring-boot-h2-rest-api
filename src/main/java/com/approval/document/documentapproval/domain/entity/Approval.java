@@ -43,4 +43,8 @@ public class Approval {
         this.comment = comment;
         this.order = order;
     }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
 }
