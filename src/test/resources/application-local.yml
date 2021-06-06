@@ -1,0 +1,75 @@
+server:
+  port: 8088
+  tomcat:
+    uri-encoding: UTF-8
+  undertow:
+    accesslog:
+      dir: ./undertow_log
+      enabled: true
+      pattern: "%t %a %s \"%r\" %b (%D ms)"
+      prefix: access-log.
+      suffix: log
+      rotate: true
+api:
+  key: 3xCv29981_Tx091dUx98_84PTx905EB
+
+auth:
+  token:
+    key: ThTufqlsdlqslek!7p
+
+spring:
+  pid:
+    file: project.pid
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    show_sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        dialect: com.config.datasource.CustomH2SqlDialect
+    database-platform: com.config.datasource.CustomH2SqlDialect
+    hibernate:
+      ddl-auto: none
+    generate-ddl: false
+  transaction:
+    default-timeout: 2
+  datasource:
+    tomcat:
+      initial-size: 15
+      max-wait: 20000
+      max-active: 50
+      max-idle: 15
+      min-idle: 8
+      default-auto-commit: true
+    sql-script-encoding: UTF-8
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+    url: jdbc:h2:mem:testdb;DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1
+    initialization-mode: always
+
+hibernate:
+  jdbc:
+    batch_size: 100
+    batch_versioned_data: true
+    order_updates: true
+
+logging:
+  level:
+    root: warn
+  file:
+    path: ./logs
+    name: application.log
+
+http:
+  rest:
+    connection-timeout: 5000
+    read-timeout: 3000
+    max-connection-count: 200
+    max-connection-per-route: 20

@@ -45,3 +45,5 @@ undertow_log
 /undertow_log
 /transaction-logs
 /temp
+
+/src/main/querydsl/
