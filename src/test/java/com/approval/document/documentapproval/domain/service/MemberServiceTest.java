@@ -1,6 +1,6 @@
 package com.approval.document.documentapproval.domain.service;
 
-import com.approval.document.documentapproval.dto.ValidMemberRequestDto;
+import com.approval.document.documentapproval.dto.member.ValidMemberRequestDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

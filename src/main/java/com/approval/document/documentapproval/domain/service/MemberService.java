@@ -2,10 +2,9 @@ package com.approval.document.documentapproval.domain.service;
 
 import com.approval.document.documentapproval.domain.entity.Member;
 import com.approval.document.documentapproval.domain.entity.repository.MemberRepository;
-import com.approval.document.documentapproval.dto.ValidMemberRequestDto;
+import com.approval.document.documentapproval.dto.member.ValidMemberRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wildfly.common.Assert;
 
 @Service
 public class MemberService {
