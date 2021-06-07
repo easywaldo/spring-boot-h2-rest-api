@@ -20,11 +20,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
     }
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation ("org.springframework.boot:spring-boot-starter-undertow")
 
     // jpa setting
@@ -35,6 +34,7 @@ dependencies {
     // jdbc
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 
+    // actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // h2 in-memory database
@@ -59,6 +59,10 @@ dependencies {
     testImplementation("org.junit.vintage:junit-vintage-engine") {
         exclude group: "org.hamcrest", module: "hamcrest-core"
     }
+
+    // validation
+    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.4.2'
 }
 
 test {
