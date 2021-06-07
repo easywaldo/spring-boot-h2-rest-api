@@ -101,4 +101,9 @@ public class DocumentService {
     public List<DocumentAggregationDto> selectInBox(String approvalId) {
         return documentQueryGenerator.selectInBox(approvalId);
     }
+
+    @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = true)
+    public List<DocumentAggregationDto> selectArchive(String myUserId) {
+        return documentQueryGenerator.selectArchive(myUserId);
+    }
 }

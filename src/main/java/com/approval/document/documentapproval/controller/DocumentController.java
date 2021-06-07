@@ -64,4 +64,13 @@ public class DocumentController {
         );
     }
 
+    @ApiOperation(value = "내가 관여한 문서 중 결재가 완료(승인 또는 거절)된 문서", notes = "내가 관여된 결재문서를 조회한다.")
+    @PostMapping("/selectArchive")
+    public CommonResponseDto<List<DocumentAggregationDto>> selectArchive(@RequestBody String myUserId) {
+        List<DocumentAggregationDto> result =  documentService.selectInBox(myUserId);
+        return new CommonResponseDto<>(
+            ResponseStatus.RES_CODE_SUCCESS, "success", result
+        );
+    }
+
 }

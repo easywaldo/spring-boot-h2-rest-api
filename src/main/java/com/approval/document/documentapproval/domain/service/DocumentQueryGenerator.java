@@ -102,7 +102,7 @@ public class DocumentQueryGenerator {
         return convertAggregation(resultModel);
     }
 
-    /***
+    /**
      * 내가 결재를 해야 할 문서
      * @param approvalId
      * @return
@@ -113,6 +113,38 @@ public class DocumentQueryGenerator {
 
         BooleanBuilder whereClause = new BooleanBuilder();
         whereClause.and(qApproval.userId.eq(approvalId));
+
+        List<DocumentViewModel> resultModel = this.queryFactory.from(qEasyDocument)
+            .join(qApproval).on(qApproval.documentId.eq(qEasyDocument.documentId))
+            .where(whereClause)
+            .select(Projections.fields(DocumentViewModel.class,
+                qEasyDocument.documentId,
+                qEasyDocument.ownerId,
+                qEasyDocument.title,
+                qEasyDocument.content,
+                qEasyDocument.type,
+                qEasyDocument.documentStatus,
+                qApproval.approvalId,
+                qApproval.userId,
+                qApproval.isConfirm,
+                qApproval.isApproved))
+            .fetch();
+
+        return convertAggregation(resultModel);
+    }
+
+    /**
+     * 내가 관여한 문서 중 결재가 완료(승인 또는 거절)된 문서를 조회한다.
+     * @param myUserId
+     * @return
+     */
+    public List<DocumentAggregationDto> selectArchive(String myUserId) {
+        QEasyDocument qEasyDocument = new QEasyDocument("qed");
+        QApproval qApproval = new QApproval("qa");
+
+        BooleanBuilder whereClause = new BooleanBuilder();
+        whereClause.and(qApproval.userId.eq(myUserId));
+        whereClause.or(qEasyDocument.ownerId.eq(myUserId));
 
         List<DocumentViewModel> resultModel = this.queryFactory.from(qEasyDocument)
             .join(qApproval).on(qApproval.documentId.eq(qEasyDocument.documentId))
