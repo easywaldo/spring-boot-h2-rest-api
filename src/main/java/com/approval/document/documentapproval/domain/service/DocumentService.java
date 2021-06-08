@@ -3,10 +3,7 @@ package com.approval.document.documentapproval.domain.service;
 import com.approval.document.documentapproval.domain.entity.DocumentStatus;
 import com.approval.document.documentapproval.domain.entity.repository.ApprovalRepository;
 import com.approval.document.documentapproval.domain.entity.repository.EasyDocumentRepository;
-import com.approval.document.documentapproval.dto.document.CreateDocumentRequestDto;
-import com.approval.document.documentapproval.dto.document.DocumentAggregationDto;
-import com.approval.document.documentapproval.dto.document.DocumentConfirmRequestDto;
-import com.approval.document.documentapproval.dto.document.DocumentQueryDto;
+import com.approval.document.documentapproval.dto.document.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,17 +90,17 @@ public class DocumentService {
     }
 
     @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = true)
-    public List<DocumentAggregationDto> selectOutBox(String ownerId) {
-        return documentQueryGenerator.selectOutBox(ownerId);
+    public List<DocumentAggregationDto> selectOutBox(SearchDocumentRequestDto owner) {
+        return documentQueryGenerator.selectOutBox(owner.getFindUserId());
     }
 
     @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = true)
-    public List<DocumentAggregationDto> selectInBox(String approvalId) {
-        return documentQueryGenerator.selectInBox(approvalId);
+    public List<DocumentAggregationDto> selectInBox(SearchDocumentRequestDto approveUser) {
+        return documentQueryGenerator.selectInBox(approveUser.getFindUserId());
     }
 
     @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = true)
-    public List<DocumentAggregationDto> selectArchive(String myUserId) {
-        return documentQueryGenerator.selectArchive(myUserId);
+    public List<DocumentAggregationDto> selectArchive(SearchDocumentRequestDto me) {
+        return documentQueryGenerator.selectArchive(me.getFindUserId());
     }
 }

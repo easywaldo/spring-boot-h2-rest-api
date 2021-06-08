@@ -8,6 +8,7 @@ import com.approval.document.documentapproval.dto.CommonResponseDto;
 import com.approval.document.documentapproval.dto.document.CreateDocumentRequestDto;
 import com.approval.document.documentapproval.dto.document.DocumentAggregationDto;
 import com.approval.document.documentapproval.dto.document.DocumentConfirmRequestDto;
+import com.approval.document.documentapproval.dto.document.SearchDocumentRequestDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
@@ -87,7 +88,7 @@ public class DocumentController {
 
     @ApiOperation(value = "내가 생성한 문서 중 결재 진행 중인 문서", notes = "내가 생성한 문서 중 결재 진행 중인 문서를 조회한다.")
     @PostMapping("/selectOutBox")
-    public CommonResponseDto<List<DocumentAggregationDto>> selectOutBox(@RequestBody String ownerId) {
+    public CommonResponseDto<List<DocumentAggregationDto>> selectOutBox(@RequestBody SearchDocumentRequestDto ownerId) {
         List<DocumentAggregationDto> result =  documentService.selectOutBox(ownerId);
         return new CommonResponseDto<>(
             ResponseStatus.RES_CODE_SUCCESS, "success", result
@@ -96,7 +97,7 @@ public class DocumentController {
 
     @ApiOperation(value = "내가 결재를 해야 할 문서", notes = "내가 결재를 해야 할 문서를 조회한다.")
     @PostMapping("/selectInBox")
-    public CommonResponseDto<List<DocumentAggregationDto>> selectInBox(@RequestBody String approvalId) {
+    public CommonResponseDto<List<DocumentAggregationDto>> selectInBox(@RequestBody SearchDocumentRequestDto approvalId) {
         List<DocumentAggregationDto> result =  documentService.selectInBox(approvalId);
         return new CommonResponseDto<>(
             ResponseStatus.RES_CODE_SUCCESS, "success", result
@@ -105,8 +106,8 @@ public class DocumentController {
 
     @ApiOperation(value = "내가 관여한 문서 중 결재가 완료(승인 또는 거절)된 문서", notes = "내가 관여된 결재문서를 조회한다.")
     @PostMapping("/selectArchive")
-    public CommonResponseDto<List<DocumentAggregationDto>> selectArchive(@RequestBody String myUserId) {
-        List<DocumentAggregationDto> result =  documentService.selectInBox(myUserId);
+    public CommonResponseDto<List<DocumentAggregationDto>> selectArchive(@RequestBody SearchDocumentRequestDto myUserId) {
+        List<DocumentAggregationDto> result =  documentService.selectArchive(myUserId);
         return new CommonResponseDto<>(
             ResponseStatus.RES_CODE_SUCCESS, "success", result
         );

@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 @Service
 public class DocumentQueryGenerator {
 
-    @PersistenceContext(unitName = "easy-master")
-    private EntityManager entityManager;
+    /*@PersistenceContext(unitName = "easy-master")
+    private EntityManager entityManager;*/
 
     private final JPAQueryFactory queryFactory;
 
@@ -143,8 +143,8 @@ public class DocumentQueryGenerator {
         QApproval qApproval = new QApproval("qa");
 
         BooleanBuilder whereClause = new BooleanBuilder();
-        whereClause.and(qApproval.userId.eq(myUserId));
-        whereClause.or(qEasyDocument.ownerId.eq(myUserId));
+        whereClause.andAnyOf(qApproval.userId.eq(myUserId),qEasyDocument.ownerId.eq(myUserId));
+        whereClause.and(qEasyDocument.documentStatus.ne(DocumentStatus.ING));
 
         List<DocumentViewModel> resultModel = this.queryFactory.from(qEasyDocument)
             .join(qApproval).on(qApproval.documentId.eq(qEasyDocument.documentId))
