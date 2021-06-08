@@ -2,6 +2,7 @@ package com.approval.document.documentapproval.dto.document;
 
 import com.approval.document.documentapproval.domain.entity.DocumentStatus;
 import com.approval.document.documentapproval.domain.entity.DocumentType;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,9 @@ public class DocumentAggregationDto {
     private String content;
     private DocumentType type;
     private DocumentStatus documentStatus;
-    private List<ApprovalDto> approvalList = new ArrayList<>();
+    @JsonAlias(value = "todoApproval")
+    private List<ApprovalDto> todoApproval = new ArrayList<>();
+    private List<ApprovalDto> allApprovalLine = new ArrayList<>();
 
     @Builder
     public DocumentAggregationDto(Integer documentId,
@@ -27,14 +30,16 @@ public class DocumentAggregationDto {
                                   String content,
                                   DocumentType type,
                                   DocumentStatus documentStatus,
-                                  List<ApprovalDto> approvalList) {
+                                  List<ApprovalDto> todoApproval,
+                                  List<ApprovalDto> allApprovalLine) {
         this.documentId = documentId;
         this.ownerId = ownerId;
         this.title = title;
         this.content = content;
         this.type = type;
         this.documentStatus = documentStatus;
-        this.approvalList = approvalList;
+        this.todoApproval = todoApproval;
+        this.allApprovalLine = allApprovalLine;
     }
 
     @Getter

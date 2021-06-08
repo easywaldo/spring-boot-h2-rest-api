@@ -3,6 +3,7 @@ package com.approval.document.documentapproval.domain.service;
 import com.approval.document.documentapproval.domain.entity.DocumentStatus;
 import com.approval.document.documentapproval.domain.entity.QApproval;
 import com.approval.document.documentapproval.domain.entity.QEasyDocument;
+import com.approval.document.documentapproval.domain.entity.repository.EasyDocumentRepository;
 import com.approval.document.documentapproval.dto.document.DocumentAggregationDto;
 import com.approval.document.documentapproval.dto.document.DocumentQueryDto;
 import com.approval.document.documentapproval.dto.document.DocumentViewModel;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,14 +21,14 @@ import java.util.stream.Collectors;
 @Service
 public class DocumentQueryGenerator {
 
-    /*@PersistenceContext(unitName = "easy-master")
-    private EntityManager entityManager;*/
-
     private final JPAQueryFactory queryFactory;
+    private final EasyDocumentRepository easyDocumentRepository;
 
     @Autowired
-    public DocumentQueryGenerator(EntityManager entityManager) {
+    public DocumentQueryGenerator(EntityManager entityManager,
+                                  EasyDocumentRepository easyDocumentRepository) {
         this.queryFactory = new JPAQueryFactory(entityManager);
+        this.easyDocumentRepository = easyDocumentRepository;
     }
 
     public List<DocumentViewModel> selectDocumentViewModel(DocumentQueryDto queryDto) {
@@ -179,7 +179,7 @@ public class DocumentQueryGenerator {
                 .title(documentApproval.get(key).stream().findFirst().get().getTitle())
                 .type(documentApproval.get(key).stream().findFirst().get().getType())
                 .ownerId(documentApproval.get(key).stream().findFirst().get().getOwnerId())
-                .approvalList(documentApproval.get(key)
+                .todoApproval(documentApproval.get(key)
                     .stream()
                     .map(m ->
                         DocumentAggregationDto.ApprovalDto.builder()
@@ -189,6 +189,15 @@ public class DocumentQueryGenerator {
                             .isApproved(m.isApproved())
                             .build()
                     ).collect(Collectors.toList()))
+                .allApprovalLine(easyDocumentRepository.findById(key).get()
+                    .getApprovalList()
+                    .stream().map(line -> DocumentAggregationDto.ApprovalDto.builder()
+                        .approvalId(line.getApprovalId())
+                        .userId(line.getUserId())
+                        .isConfirm(line.isConfirm())
+                        .isApproved(line.isApproved())
+                        .build())
+                    .collect(Collectors.toList()))
                 .build());
         }
         return documentAggregationDto;
