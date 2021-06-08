@@ -5,6 +5,7 @@ import com.approval.document.documentapproval.domain.service.AuthService;
 import com.approval.document.documentapproval.domain.service.CookieService;
 import com.approval.document.documentapproval.domain.service.MemberService;
 import com.approval.document.documentapproval.dto.CommonResponseDto;
+import com.approval.document.documentapproval.dto.member.JoinMemberRequestDto;
 import com.approval.document.documentapproval.dto.member.ValidMemberRequestDto;
 import com.approval.document.documentapproval.dto.member.ValidMemberResponseDto;
 import io.swagger.annotations.ApiOperation;
@@ -65,7 +66,7 @@ public class MemberController {
 
     @ApiOperation(value = "회원 로그아웃", notes = "회원 로그아웃 세션에 대한 서버구성은 별도로 하지 않는다")
     @PostMapping("/userLogout")
-    public CommonResponseDto userLogout(@ApiIgnore HttpServletResponse response) {
+    public CommonResponseDto<?> userLogout(@ApiIgnore HttpServletResponse response) {
         Cookie deleteCookie = CookieService.deleteCookie("userJwt");
         response.addCookie(deleteCookie);
 
@@ -73,5 +74,14 @@ public class MemberController {
             ResponseStatus.RES_CODE_SUCCESS,
             "success",
             null);
+    }
+
+    @ApiOperation(value = "회원 가입", notes = "회원 가입")
+    @PostMapping("/userJoin")
+    public CommonResponseDto<?> userJoin(@RequestBody JoinMemberRequestDto requestDto) {
+        return new CommonResponseDto<>(
+            ResponseStatus.RES_CODE_SUCCESS,
+            "success",
+            memberService.joinUser(requestDto));
     }
 }

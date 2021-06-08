@@ -44,6 +44,7 @@ public class HttpInterceptor implements HandlerInterceptor {
                 request.getRequestURI().contains("csrf") ||
                 request.getRequestURI().contains("favicon.ico") ||
                 request.getRequestURI().contains("/member/userLogin") ||
+                request.getRequestURI().contains("/member/userJoin") ||
                 request.getRequestURI().contains("/actuator/prometheus") ||
                 request.getRequestURI().contains("/actuator/shutdown")) {
             return true;
