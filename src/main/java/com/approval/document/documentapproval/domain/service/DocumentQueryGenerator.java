@@ -113,6 +113,8 @@ public class DocumentQueryGenerator {
 
         BooleanBuilder whereClause = new BooleanBuilder();
         whereClause.and(qApproval.userId.eq(approvalId));
+        whereClause.and(qEasyDocument.documentStatus.eq(DocumentStatus.ING));
+        whereClause.and(qApproval.isConfirm.eq(false));
 
         List<DocumentViewModel> resultModel = this.queryFactory.from(qEasyDocument)
             .join(qApproval).on(qApproval.documentId.eq(qEasyDocument.documentId))

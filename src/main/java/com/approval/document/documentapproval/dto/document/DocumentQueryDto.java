@@ -1,5 +1,6 @@
 package com.approval.document.documentapproval.dto.document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class DocumentQueryDto {
+
     private Integer documentId;
+
     private Integer approvalId;
+
+    @JsonIgnore
     private boolean isPrevCheck;
+
+    @JsonIgnore
     private boolean isLastCheck;
 
     @Builder

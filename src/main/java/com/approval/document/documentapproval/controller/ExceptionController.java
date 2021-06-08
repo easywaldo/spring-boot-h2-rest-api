@@ -1,5 +1,6 @@
 package com.approval.document.documentapproval.controller;
 
+import com.approval.document.documentapproval.domain.entity.DocumentConfirmException;
 import com.approval.document.documentapproval.domain.entity.ResponseStatus;
 import com.approval.document.documentapproval.dto.CommonResponseDto;
 import org.springframework.http.ResponseEntity;
@@ -24,5 +25,15 @@ public class ExceptionController {
             return ResponseEntity.badRequest().body(
                 new CommonResponseDto<>(ResponseStatus.RES_CODE_SERVICE, "", null));
         }
+    }
+
+    @ExceptionHandler({DocumentConfirmException.class})
+    @ResponseBody
+    public ResponseEntity<CommonResponseDto<?>> documentConfirmExceptionHandler(final DocumentConfirmException ex) {
+        return ResponseEntity.badRequest().body(
+            new CommonResponseDto<>(
+                ResponseStatus.RES_CODE_SERVICE,
+                ex.getErrorMessage(),
+                null));
     }
 }
