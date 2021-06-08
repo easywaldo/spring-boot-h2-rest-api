@@ -61,11 +61,11 @@ public class HttpInterceptor implements HandlerInterceptor {
         // Cookie 를 이용한 jwt 인증방식
         String userJwt = CookieService.getToken(request);
 
-        if (userJwt.isEmpty()) return false;
+        if (userJwt.isEmpty()) throw new IllegalAccessException("no auth");
         Map<String, String> userInfo = authService.validateToken(userJwt);
 
         if (userInfo.get("name").isEmpty()) {
-            return false;
+            throw new IllegalAccessException("no auth");
         }
 
         return apiKey.equals(clientApiKey.get());
