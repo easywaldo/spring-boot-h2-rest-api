@@ -101,7 +101,7 @@ public class DocumentService {
     }
 
     @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = true)
-    public List<DocumentAggregationDto> selectArchive(SearchDocumentRequestDto me) {
-        return documentQueryGenerator.selectArchive(me.getFindUserId());
+    public List<DocumentAggregationDto> selectArchive(DocumentPagingRequestDto requestDto) {
+        return documentQueryGenerator.selectArchive(requestDto);
     }
 }

@@ -5,6 +5,7 @@ import com.approval.document.documentapproval.domain.entity.QApproval;
 import com.approval.document.documentapproval.domain.entity.QEasyDocument;
 import com.approval.document.documentapproval.domain.entity.repository.EasyDocumentRepository;
 import com.approval.document.documentapproval.dto.document.DocumentAggregationDto;
+import com.approval.document.documentapproval.dto.document.DocumentPagingRequestDto;
 import com.approval.document.documentapproval.dto.document.DocumentQueryDto;
 import com.approval.document.documentapproval.dto.document.DocumentViewModel;
 import com.querydsl.core.BooleanBuilder;
@@ -137,31 +138,35 @@ public class DocumentQueryGenerator {
 
     /**
      * 내가 관여한 문서 중 결재가 완료(승인 또는 거절)된 문서를 조회한다.
-     * @param myUserId
+     * @param requestDto
      * @return
      */
-    public List<DocumentAggregationDto> selectArchive(String myUserId) {
+    public List<DocumentAggregationDto> selectArchive(DocumentPagingRequestDto requestDto) {
         QEasyDocument qEasyDocument = new QEasyDocument("qed");
         QApproval qApproval = new QApproval("qa");
 
         BooleanBuilder whereClause = new BooleanBuilder();
-        whereClause.andAnyOf(qApproval.userId.eq(myUserId),qEasyDocument.ownerId.eq(myUserId));
+        whereClause.andAnyOf(qApproval.userId.eq(requestDto.getUserId()),qEasyDocument.ownerId.eq(requestDto.getUserId()));
         whereClause.and(qEasyDocument.documentStatus.ne(DocumentStatus.ING));
 
-        List<DocumentViewModel> resultModel = this.queryFactory.from(qEasyDocument)
+        List<Integer> documentIdList = this.queryFactory.from(qEasyDocument)
             .join(qApproval).on(qApproval.documentId.eq(qEasyDocument.documentId))
             .where(whereClause)
+            .groupBy(qEasyDocument.documentId)
+            .offset(requestDto.getOffset())
+            .limit(requestDto.getLimit())
+            .select(qEasyDocument.documentId)
+            .fetch();
+
+        List<DocumentViewModel> resultModel = this.queryFactory.from(qEasyDocument)
+            .where(qEasyDocument.documentId.in(documentIdList))
             .select(Projections.fields(DocumentViewModel.class,
                 qEasyDocument.documentId,
                 qEasyDocument.ownerId,
                 qEasyDocument.title,
                 qEasyDocument.content,
                 qEasyDocument.type,
-                qEasyDocument.documentStatus,
-                qApproval.approvalId,
-                qApproval.userId,
-                qApproval.isConfirm,
-                qApproval.isApproved))
+                qEasyDocument.documentStatus))
             .fetch();
 
         return convertAggregation(resultModel);
@@ -172,24 +177,15 @@ public class DocumentQueryGenerator {
             .collect(Collectors.groupingBy(g -> g.getDocumentId(), Collectors.toList()));
         List<DocumentAggregationDto> documentAggregationDto = new ArrayList<>();
         for (var key : documentApproval.keySet()) {
+            DocumentViewModel keyInfo = documentApproval.get(key).stream().findFirst().get();
             documentAggregationDto.add(DocumentAggregationDto.builder()
                 .documentId(key)
-                .documentStatus(documentApproval.get(key).stream().findFirst().get().getDocumentStatus())
-                .content(documentApproval.get(key).stream().findFirst().get().getContent())
-                .title(documentApproval.get(key).stream().findFirst().get().getTitle())
-                .type(documentApproval.get(key).stream().findFirst().get().getType())
-                .ownerId(documentApproval.get(key).stream().findFirst().get().getOwnerId())
-                .todoApproval(documentApproval.get(key)
-                    .stream()
-                    .map(m ->
-                        DocumentAggregationDto.ApprovalDto.builder()
-                            .approvalId(m.getApprovalId())
-                            .userId(m.getUserId())
-                            .isConfirm(m.isConfirm())
-                            .isApproved(m.isApproved())
-                            .build()
-                    ).collect(Collectors.toList()))
-                .allApprovalLine(easyDocumentRepository.findById(key).get()
+                .documentStatus(keyInfo.getDocumentStatus())
+                .content(keyInfo.getContent())
+                .title(keyInfo.getTitle())
+                .type(keyInfo.getType())
+                .ownerId(keyInfo.getOwnerId())
+                .approvalLine(easyDocumentRepository.findById(key).get()
                     .getApprovalList()
                     .stream().map(line -> DocumentAggregationDto.ApprovalDto.builder()
                         .approvalId(line.getApprovalId())
