@@ -67,7 +67,15 @@ public class AuthService {
         }
     }
 
-    public String getJwtValueFromHeader(HttpServletRequest request) throws UnsupportedEncodingException {
+    public String getUserIdFromJwtCookie(HttpServletRequest request) {
+        String userJwt = CookieService.getToken(request);
+        Map<String, String> userInfo = this.validateToken(userJwt);
+
+
+        return userInfo.get("name");
+    }
+
+    public String getJwtValueFromHeader(HttpServletRequest request) {
         //String token = CookieService.getToken(request);
         //String userNameFromToken = this.validateToken(token).get("name");
 
