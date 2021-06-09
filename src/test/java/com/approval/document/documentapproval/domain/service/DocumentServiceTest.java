@@ -1,6 +1,7 @@
 package com.approval.document.documentapproval.domain.service;
 
 import com.approval.document.documentapproval.domain.entity.Approval;
+import com.approval.document.documentapproval.domain.entity.DocumentConfirmException;
 import com.approval.document.documentapproval.domain.entity.DocumentType;
 import com.approval.document.documentapproval.domain.entity.repository.ApprovalRepository;
 import com.approval.document.documentapproval.domain.entity.repository.EasyDocumentRepository;
@@ -9,7 +10,6 @@ import com.approval.document.documentapproval.dto.document.CreateDocumentRequest
 import com.approval.document.documentapproval.dto.document.DocumentConfirmRequestDto;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -65,7 +65,7 @@ public class DocumentServiceTest {
         assertThat(approvalLine.stream().filter(x -> approvalUsers.contains(x.getUserId())).count()).isEqualTo(2L);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = DocumentConfirmException.class)
     public void given_document_approval_confirm_request_with_un_confirmed_prev_user_then_confirm_service_should_throws_exception() {
         // arrange
         List<ApprovalLineDto> approvalLine = new ArrayList<>();

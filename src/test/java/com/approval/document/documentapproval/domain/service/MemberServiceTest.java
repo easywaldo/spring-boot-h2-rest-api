@@ -31,7 +31,7 @@ public class MemberServiceTest {
     }
 
     @Test
-    public void given_un_valid_member_user_id_and_password_then_is_valid_user_should_return_true() {
+    public void given_un_valid_member_user_id_and_password_then_is_valid_user_should_return_false() {
         // arrange
         ValidMemberRequestDto requestDto = ValidMemberRequestDto.builder()
             .userId("easywaldo")

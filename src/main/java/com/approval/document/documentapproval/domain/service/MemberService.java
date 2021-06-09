@@ -24,7 +24,7 @@ public class MemberService {
             .findByUserId(requestDto.getUserId())
             .orElseThrow(() -> new IllegalArgumentException("not exists user"));
 
-        return member.getUserPwd().equals(requestDto.getUserPwd());
+        return member.getUserPwd().equals(SHAEncryptServiceImpl.getSHA512(requestDto.getUserPwd()));
     }
 
     @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = false)

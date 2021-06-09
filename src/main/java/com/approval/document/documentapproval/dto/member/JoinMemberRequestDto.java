@@ -1,6 +1,7 @@
 package com.approval.document.documentapproval.dto.member;
 
 import com.approval.document.documentapproval.domain.entity.Member;
+import com.approval.document.documentapproval.domain.service.SHAEncryptServiceImpl;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class JoinMemberRequestDto {
         return Member.builder()
             .memberName(this.getJoinMemberName())
             .userId(this.getJoinUserId())
-            .userPwd(this.getJoinUserPwd())
+            .userPwd(SHAEncryptServiceImpl.getSHA512(this.getJoinUserPwd()))
             .build();
     }
 
