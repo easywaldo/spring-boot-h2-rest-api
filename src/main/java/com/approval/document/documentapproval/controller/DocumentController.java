@@ -96,6 +96,16 @@ public class DocumentController {
         @RequestBody DocumentConfirmRequestDto requestDto,
         HttpServletRequest request) {
 
+        List<ConstraintViolation<DocumentConfirmRequestDto>> violations =
+            this.validator.validate(requestDto).stream().collect(Collectors.toList());
+        if (violations.stream().count() > 0) {
+            return new CommonResponseDto(
+                ResponseStatus.RES_CODE_SERVICE,
+                "fail",
+                new ViolationsMessageGenerator().getMessage(violations)
+            );
+        }
+
         if (!requestDto.getUserId().equals(authService.getUserIdFromJwtCookie(request))) {
             return new CommonResponseDto(
                 ResponseStatus.RES_CODE_SERVICE,
@@ -111,17 +121,27 @@ public class DocumentController {
     @ApiOperation(value = "내가 생성한 문서 중 결재 진행 중인 문서", notes = "내가 생성한 문서 중 결재 진행 중인 문서를 조회한다.")
     @PostMapping("/selectOutBox")
     public CommonResponseDto<List<DocumentAggregationDto>> selectOutBox(
-        @RequestBody SearchDocumentRequestDto ownerId,
+        @RequestBody SearchDocumentRequestDto requestDto,
         HttpServletRequest request) {
 
-        if (!ownerId.equals(authService.getUserIdFromJwtCookie(request))) {
+        List<ConstraintViolation<SearchDocumentRequestDto>> violations =
+            this.validator.validate(requestDto).stream().collect(Collectors.toList());
+        if (violations.stream().count() > 0) {
+            return new CommonResponseDto(
+                ResponseStatus.RES_CODE_SERVICE,
+                "fail",
+                new ViolationsMessageGenerator().getMessage(violations)
+            );
+        }
+
+        if (!requestDto.getFindUserId().equals(authService.getUserIdFromJwtCookie(request))) {
             return new CommonResponseDto(
                 ResponseStatus.RES_CODE_SERVICE,
                 "일치하지 않는 회원인증정보 입니다.",
                 null);
         }
 
-        List<DocumentAggregationDto> result =  documentService.selectOutBox(ownerId);
+        List<DocumentAggregationDto> result =  documentService.selectOutBox(requestDto);
         return new CommonResponseDto<>(
             ResponseStatus.RES_CODE_SUCCESS, "success", result
         );
@@ -130,17 +150,27 @@ public class DocumentController {
     @ApiOperation(value = "내가 결재를 해야 할 문서", notes = "내가 결재를 해야 할 문서를 조회한다.")
     @PostMapping("/selectInBox")
     public CommonResponseDto<List<DocumentAggregationDto>> selectInBox(
-        @RequestBody SearchDocumentRequestDto approvalId,
+        @RequestBody SearchDocumentRequestDto requestDto,
         HttpServletRequest request) {
 
-        if (!approvalId.equals(authService.getUserIdFromJwtCookie(request))) {
+        List<ConstraintViolation<SearchDocumentRequestDto>> violations =
+            this.validator.validate(requestDto).stream().collect(Collectors.toList());
+        if (violations.stream().count() > 0) {
+            return new CommonResponseDto(
+                ResponseStatus.RES_CODE_SERVICE,
+                "fail",
+                new ViolationsMessageGenerator().getMessage(violations)
+            );
+        }
+
+        if (!requestDto.getFindUserId().equals(authService.getUserIdFromJwtCookie(request))) {
             return new CommonResponseDto(
                 ResponseStatus.RES_CODE_SERVICE,
                 "일치하지 않는 회원인증정보 입니다.",
                 null);
         }
 
-        List<DocumentAggregationDto> result =  documentService.selectInBox(approvalId);
+        List<DocumentAggregationDto> result =  documentService.selectInBox(requestDto);
         return new CommonResponseDto<>(
             ResponseStatus.RES_CODE_SUCCESS, "success", result
         );
@@ -151,6 +181,16 @@ public class DocumentController {
     public CommonResponseDto<List<DocumentAggregationDto>> selectArchive(
         @RequestBody DocumentPagingRequestDto requestDto,
         HttpServletRequest request) {
+
+        List<ConstraintViolation<DocumentPagingRequestDto>> violations =
+            this.validator.validate(requestDto).stream().collect(Collectors.toList());
+        if (violations.stream().count() > 0) {
+            return new CommonResponseDto(
+                ResponseStatus.RES_CODE_SERVICE,
+                "fail",
+                new ViolationsMessageGenerator().getMessage(violations)
+            );
+        }
 
         if (!requestDto.getUserId().equals(authService.getUserIdFromJwtCookie(request))) {
             return new CommonResponseDto(
