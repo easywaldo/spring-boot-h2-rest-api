@@ -4,12 +4,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @Getter
 @NoArgsConstructor
 public class DocumentConfirmRequestDto {
+    @NotNull
     private Integer approvalId;
+    @NotNull
     private Integer documentId;
+    @NotNull
+    @NotEmpty
     private String userId;
+    @NotNull
     private boolean approved;
     private String comment;
 
