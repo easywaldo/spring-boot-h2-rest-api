@@ -13,10 +13,34 @@
     
 #### 테스트 시나리오
 - /member/userJoin 으로 회원가입
-- /member/userLogin 으로 로그인 >> JWT 발행이 완료 (등록계정 : easywaldo 아이디  / 1234 패스워드)
+- /member/userLogin 으로 로그인 >> JWT 발행이 완료 
+  - (등록계정 : easywaldo 아이디  / 1234 패스워드)
+  - (등록계정 : acetious 아이디  / 1234 패스워드)
 - /document/create 으로 전자결재문서작성
+  >{
+  "approvalLine": [
+  {
+  "order": 1,
+  "userId": "easywaldo"
+  },
+  {
+  "order": 2,
+  "userId": "acetious"
+  }
+  ],
+  "documentContent": "테스트",
+  "documentTitle": "테스트",
+  "documentType": "PRODUCT_PURCHASE"
+  }
 - /document/selectInBox 으로 내가 결재해야할 문서를 조회
 - /document/confirm 으로 승인 또는 반려
+  > {
+  "approvalId": 1,
+  "approved": true,
+  "comment": "결재 완료",
+  "documentId": 1,
+  "userId": "easywaldo"
+  }
 - /document/selectOutBox 으로 내가 생성한 문서 중 진행중인 문서를 조회
 - /document/selectArchive 으로 내가 관련된 문서를 조회
 
