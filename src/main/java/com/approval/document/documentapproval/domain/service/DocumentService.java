@@ -38,6 +38,9 @@ public class DocumentService {
     @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = false)
     public void confirmDocument(DocumentConfirmRequestDto requestDto) {
         var document = this.easyDocumentRepository.findById(requestDto.getDocumentId());
+        if (document.isEmpty()) {
+            throw new DocumentConfirmException("존재하지 않는 결재정보 입니다.");
+        }
         if (!document.get().getDocumentStatus().equals(DocumentStatus.ING)) {
             throw new DocumentConfirmException("결재가 종료된 결재정보 입니다.");
         }
