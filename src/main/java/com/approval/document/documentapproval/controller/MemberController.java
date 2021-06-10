@@ -6,19 +6,18 @@ import com.approval.document.documentapproval.domain.service.CookieService;
 import com.approval.document.documentapproval.domain.service.MemberService;
 import com.approval.document.documentapproval.dto.CommonResponseDto;
 import com.approval.document.documentapproval.dto.member.JoinMemberRequestDto;
+import com.approval.document.documentapproval.dto.member.MemberResponseDto;
 import com.approval.document.documentapproval.dto.member.ValidMemberRequestDto;
 import com.approval.document.documentapproval.dto.member.ValidMemberResponseDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/member")
@@ -83,5 +82,12 @@ public class MemberController {
             ResponseStatus.RES_CODE_SUCCESS,
             "success",
             memberService.joinUser(requestDto));
+    }
+
+    @ApiOperation(value = "회원 리스트 조회", notes = "등록된 회원 리스트를 리턴한다")
+    @GetMapping("/userList")
+    public CommonResponseDto<List<MemberResponseDto>> userList() {
+        return new CommonResponseDto<>(
+            ResponseStatus.RES_CODE_SUCCESS, "", this.memberService.findUserList());
     }
 }
