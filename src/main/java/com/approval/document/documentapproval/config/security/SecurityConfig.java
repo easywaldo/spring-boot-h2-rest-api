@@ -80,9 +80,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/member/**")
+            .antMatchers("/member/join", "/member/userLogin", "/member/userLogout")
             .permitAll()
-            .antMatchers("/document/**")
+            .antMatchers("/document/**", "/member/userList")
             .authenticated()
             .antMatchers("/**")
             .permitAll();

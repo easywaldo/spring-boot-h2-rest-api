@@ -1,6 +1,7 @@
 package com.approval.document.documentapproval.domain.service;
 
 import com.approval.document.documentapproval.domain.entity.Member;
+import com.google.common.base.Strings;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -81,6 +82,7 @@ public class AuthService {
         //String userNameFromToken = this.validateToken(token).get("name");
 
         String userJwt = request.getHeader("Authorization");
+        if (Strings.isNullOrEmpty(userJwt)) return "";
         String userId = userJwt.trim().replace("Bearer", "");
 
         return userId;
