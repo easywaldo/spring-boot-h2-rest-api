@@ -50,19 +50,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-
-            response.setHeader("Access-Control-Allow-Origin", "*");
-            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            response.setHeader("Access-Control-Max-Age", "3600");
-            response.setHeader("Access-Control-Allow-Headers", "authorization, content-type, xsrf-token");
-            response.addHeader("Access-Control-Expose-Headers", "xsrf-token");
-
-            if ("OPTIONS".equals(request.getMethod())) {
-                response.setStatus(HttpServletResponse.SC_OK);
-            } else {
-                filterChain.doFilter(request, response);
-            }
-
         } catch (Exception e) {
             // token 이 없거나 인증정보가 없으면 filter를 통과해서 security쪽으로 가서 401로
             logger.debug("Cannot set user authentication: {}", e);

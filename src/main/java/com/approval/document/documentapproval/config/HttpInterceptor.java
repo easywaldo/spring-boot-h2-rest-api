@@ -32,8 +32,10 @@ public class HttpInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler) throws IllegalAccessException {
 
+        return true;
 
-        if (request.getRequestURI().equals("")) {
+
+        /*if (request.getRequestURI().equals("")) {
             return true;
         }
 
@@ -70,6 +72,6 @@ public class HttpInterceptor implements HandlerInterceptor {
             throw new IllegalAccessException("no auth");
         }
 
-        return apiKey.equals(clientApiKey.get());
+        return apiKey.equals(clientApiKey.get());*/
     }
 }
