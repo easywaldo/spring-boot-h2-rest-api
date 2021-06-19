@@ -36,8 +36,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //@Autowired
     //private AdminService adminService;
 
+    private final AuthEntryPointJwt authEntryPointJwt;
+
     @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    public SecurityConfig(AuthEntryPointJwt authEntryPointJwt) {
+        this.authEntryPointJwt = authEntryPointJwt;
+    }
 
     @Bean
     @Override
@@ -70,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf()
             .disable()
             .exceptionHandling()
-            .authenticationEntryPoint(unauthorizedHandler)
+            .authenticationEntryPoint(authEntryPointJwt)
             .and()
             .headers()
             .frameOptions()

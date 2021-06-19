@@ -28,11 +28,15 @@ public class CookieService {
     }
 
     public static String getToken(HttpServletRequest request) {
-        String userJwt = Arrays.stream(request.getCookies())
+        try {
+            return Arrays.stream(request.getCookies())
                 .filter(x -> x.getName().equals("userJwt"))
                 .findFirst()
                 .map(Cookie::getValue)
                 .orElse("");
-        return userJwt;
+        }
+        catch (Exception ex) {
+            return "";
+        }
     }
 }
