@@ -20,6 +20,11 @@ auth:
 spring:
   pid:
     file: project.pid
+  jwtSecret: "!socialBOfficeLocal@"
+  jwtExpirationMs: 1800000 # 1800000: 30min, 300000: 5min
+  refreshExpirationMs: 3600000 # 86400000: 1day, 3600000: 1hour, 1800000: 30min
+  accessTokenCookieName: accessToken
+  refreshTokenCookieName: refreshToken
   h2:
     console:
       enabled: true

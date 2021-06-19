@@ -1,6 +1,7 @@
 ### Easywaldo 전자결재 API
 
 #### API 사용법
+0. Active Profile 이 Local 로 세팅이 되어 있으므로 인텔리제이 또는 이클립스 등에서 Active.profile 을 local 로 설정하여 구동하여야 합니다.
 1. Springboot 프로젝트를 빌드 후 인텔리제이 등을 이용하여 jar 를 실행합니다.
 2. 8088 포트로 접속이 가능 합니다. (http://localhost:8088/swagger-ui.html)
 3. Swagger 문서에 각 URI 에 대한 설명을 참조하여 전자결재 테스트를 진행이 가능 합니다.

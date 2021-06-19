@@ -21,14 +21,13 @@ public class WebConfig implements WebMvcConfigurer, WebMvcRegistrations {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(interceptor)
-                .addPathPatterns("/**");
+        //registry.addInterceptor(interceptor).addPathPatterns("/**");
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
+        /*registry.addMapping("/**")
                 .allowedOrigins("*")
-                .allowedMethods("GET", "POST");
+                .allowedMethods("GET", "POST");*/
     }
 }

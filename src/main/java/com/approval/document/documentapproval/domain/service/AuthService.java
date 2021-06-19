@@ -1,5 +1,6 @@
 package com.approval.document.documentapproval.domain.service;
 
+import com.approval.document.documentapproval.domain.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -83,5 +84,12 @@ public class AuthService {
         String userId = userJwt.trim().replace("Bearer", "");
 
         return userId;
+    }
+
+    public Member getUserDetails(HttpServletRequest request) {
+        String userId = this.getJwtValueFromHeader(request);
+        return Member.builder()
+            .userId(userId)
+            .build();
     }
 }

@@ -66,6 +66,21 @@ dependencies {
 
     // jwt
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    // spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // String utils setting
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
+
+    // spring-data-redis
+    compile('org.springframework.boot:spring-boot-starter-data-redis')
+    implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+
+    // json object
+    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 }
 
 test {

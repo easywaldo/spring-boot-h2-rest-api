@@ -25,6 +25,12 @@ public class Member {
     @Column(name = "user_pwd")
     private String userPwd;
 
+    @Transient
+    private String roleGroup;
+    public String getRoleGroup() {
+        return "general";
+    }
+
     @Builder
     public Member(Integer memberSeq,
                   String memberName,

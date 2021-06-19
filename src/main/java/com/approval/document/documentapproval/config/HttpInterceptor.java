@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Optional;
 
+@Deprecated
 @Component
 public class HttpInterceptor implements HandlerInterceptor {
 
