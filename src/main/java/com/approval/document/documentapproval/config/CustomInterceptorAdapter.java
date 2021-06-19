@@ -9,13 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Deprecated
 @Component
 public class CustomInterceptorAdapter extends OncePerRequestFilter {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-        throws ServletException, IOException {
-            response.setHeader("Access-Control-Allow-Origin", "*");
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
+            /*response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
             response.setHeader("Access-Control-Max-Age", "3600");
             response.setHeader("Access-Control-Allow-Headers", "authorization, content-type, xsrf-token");
@@ -24,6 +24,6 @@ public class CustomInterceptorAdapter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_OK);
             } else {
                 filterChain.doFilter(request, response);
-            }
+            }*/
     }
 }

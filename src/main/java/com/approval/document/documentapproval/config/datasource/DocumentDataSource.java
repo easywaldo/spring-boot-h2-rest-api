@@ -1,4 +1,4 @@
-package com.approval.document.documentapproval.config;
+package com.approval.document.documentapproval.config.datasource;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
