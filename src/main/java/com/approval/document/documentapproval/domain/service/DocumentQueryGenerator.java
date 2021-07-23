@@ -1,6 +1,7 @@
 package com.approval.document.documentapproval.domain.service;
 
 import com.approval.document.documentapproval.domain.entity.DocumentStatus;
+import com.approval.document.documentapproval.domain.entity.Member;
 import com.approval.document.documentapproval.domain.entity.QApproval;
 import com.approval.document.documentapproval.domain.entity.QEasyDocument;
 import com.approval.document.documentapproval.domain.entity.repository.EasyDocumentRepository;
@@ -24,12 +25,14 @@ public class DocumentQueryGenerator {
 
     private final JPAQueryFactory queryFactory;
     private final EasyDocumentRepository easyDocumentRepository;
+    private final EntityManager entityManager;
 
     @Autowired
     public DocumentQueryGenerator(EntityManager entityManager,
                                   EasyDocumentRepository easyDocumentRepository) {
         this.queryFactory = new JPAQueryFactory(entityManager);
         this.easyDocumentRepository = easyDocumentRepository;
+        this.entityManager = entityManager;
     }
 
     public List<DocumentViewModel> selectDocumentViewModel(DocumentQueryDto queryDto) {
@@ -197,6 +200,11 @@ public class DocumentQueryGenerator {
                 .build());
         }
         return documentAggregationDto;
+    }
+
+    public Member findMemberTest() {
+        Member result = (Member)this.entityManager.find(Member.class, 1);
+        return result;
     }
 
 }

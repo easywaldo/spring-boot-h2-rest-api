@@ -16,10 +16,13 @@ import java.util.stream.Collectors;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final DocumentQueryGenerator queryGenerator;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepository memberRepository,
+                         DocumentQueryGenerator documentQueryGenerator) {
         this.memberRepository = memberRepository;
+        this.queryGenerator = documentQueryGenerator;
     }
 
     @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = true)
@@ -45,5 +48,13 @@ public class MemberService {
             .memberName(x.getMemberName())
             .build())
             .collect(Collectors.toList());
+    }
+
+    @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = true)
+    public Member findMember() {
+        Member member1 = this.memberRepository.findByUserId("easywaldo").get();
+        Member member2 = this.memberRepository.findByUserId("easywaldo").get();
+        Member member3 = this.queryGenerator.findMemberTest();
+        return member2;
     }
 }
