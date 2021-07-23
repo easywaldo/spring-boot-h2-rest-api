@@ -52,9 +52,12 @@ public class MemberService {
 
     @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = true)
     public Member findMember() {
-        Member member1 = this.memberRepository.findByUserId("easywaldo").get();
-        Member member2 = this.memberRepository.findByUserId("easywaldo").get();
+        //Member member1 = this.memberRepository.findByUserId("easywaldo").get();
+        //Member member2 = this.memberRepository.findByUserId("easywaldo").get();
         Member member3 = this.queryGenerator.findMemberTest();
-        return member2;
+        Member member4 = this.memberRepository.findByUserId("easywaldo").get();
+
+        this.queryGenerator.findMemberTest();
+        return member3;
     }
 }
