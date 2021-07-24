@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface MemberRepository extends JpaRepository<Member, Integer> {
     Optional<Member> findByUserId(String userId);
     @Query(value = "select m from Member m where m.userId = ?1")

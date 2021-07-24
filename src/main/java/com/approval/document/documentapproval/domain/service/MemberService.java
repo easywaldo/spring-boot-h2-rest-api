@@ -7,6 +7,7 @@ import com.approval.document.documentapproval.dto.member.MemberResponseDto;
 import com.approval.document.documentapproval.dto.member.ValidMemberRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -50,12 +51,12 @@ public class MemberService {
             .collect(Collectors.toList());
     }
 
-    @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = true)
+    @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = false, isolation = Isolation.READ_UNCOMMITTED)
     public Member findMember() {
-        Member member1 = this.memberRepository.findByUserId("easywaldo").get();
+        Member member1 = this.memberRepository.findById(1).get();
         Member member2 = this.memberRepository.findByUserId("easywaldo").get();
         Member member3 = this.queryGenerator.findMemberTest();
-        Member member4 = this.memberRepository.findByUserId("easywaldo").get();
+        Member member4 = this.memberRepository.findById(1).get();
         Member member5 = this.memberRepository.jpqlFindUserId("easywaldo").get();
         Member member6 = this.queryGenerator.findMemberTest();
         return member3;
