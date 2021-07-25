@@ -26,7 +26,7 @@ public class DocumentQueryGenerator {
 
     private final JPAQueryFactory queryFactory;
     private final EasyDocumentRepository easyDocumentRepository;
-    @PersistenceContext
+    //@PersistenceContext
     private final EntityManager entityManager;
 
     @Autowired
