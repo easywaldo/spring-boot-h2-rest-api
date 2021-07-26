@@ -209,4 +209,10 @@ public class DocumentQueryGenerator {
         return result;
     }
 
+    public Member findMemberTestV2() {
+        Member result = (Member)this.entityManager.createQuery(
+            "select m from Member m where m.userId = 'easywaldo'").getSingleResult();
+        return result;
+    }
+
 }

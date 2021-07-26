@@ -59,6 +59,8 @@ public class MemberService {
         Member member4 = this.memberRepository.findById(1).get();
         Member member5 = this.memberRepository.jpqlFindUserId("easywaldo").get();
         Member member6 = this.queryGenerator.findMemberTest();
+        Member member7 = this.queryGenerator.findMemberTestV2();
+        Member member8 = this.queryGenerator.findMemberTestV2();
         return member3;
     }
 }
