@@ -1,9 +1,6 @@
 package com.approval.document.documentapproval.domain.service;
 
-import com.approval.document.documentapproval.domain.entity.DocumentStatus;
-import com.approval.document.documentapproval.domain.entity.Member;
-import com.approval.document.documentapproval.domain.entity.QApproval;
-import com.approval.document.documentapproval.domain.entity.QEasyDocument;
+import com.approval.document.documentapproval.domain.entity.*;
 import com.approval.document.documentapproval.domain.entity.repository.EasyDocumentRepository;
 import com.approval.document.documentapproval.dto.document.DocumentAggregationDto;
 import com.approval.document.documentapproval.dto.document.DocumentPagingRequestDto;
@@ -212,6 +209,19 @@ public class DocumentQueryGenerator {
     public Member findMemberTestV2() {
         Member result = (Member)this.entityManager.createQuery(
             "select m from Member m where m.userId = 'easywaldo'").getSingleResult();
+        return result;
+    }
+
+    public Member findMemberQuery() {
+        var result = queryFactory.from(QMember.member)
+            .where(QMember.member.memberSeq.eq(1))
+            .select(Projections.fields(Member.class,
+                QMember.member.memberSeq,
+                QMember.member.memberName,
+                QMember.member.userId,
+                QMember.member.userPwd
+                ))
+            .fetchOne();
         return result;
     }
 

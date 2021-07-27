@@ -61,6 +61,7 @@ public class MemberService {
         Member member6 = this.queryGenerator.findMemberTest();
         Member member7 = this.queryGenerator.findMemberTestV2();
         Member member8 = this.queryGenerator.findMemberTestV2();
+        Member member9 = this.queryGenerator.findMemberQuery();
         return member3;
     }
 }
