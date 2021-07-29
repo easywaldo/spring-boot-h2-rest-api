@@ -41,4 +41,8 @@ public class Member {
         this.userId = userId;
         this.userPwd = userPwd;
     }
+
+    public void update(String memberName) {
+        this.memberName = memberName;
+    }
 }

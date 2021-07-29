@@ -32,7 +32,7 @@ spring:
 
   jpa:
     show_sql: true
-    open-in-view: false
+    open-in-view: true
     properties:
       hibernate:
         format_sql: true
@@ -41,7 +41,7 @@ spring:
       ddl-auto: create
     generate-ddl: true
   transaction:
-    default-timeout: 2
+    default-timeout: 20
   datasource:
     hikari:
       max-lifetime: 30000

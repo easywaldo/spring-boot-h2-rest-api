@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
@@ -221,7 +222,10 @@ public class DocumentQueryGenerator {
                 QMember.member.userId,
                 QMember.member.userPwd
                 ))
-            .fetchOne();
+            .setLockMode(LockModeType.WRITE).fetchOne();
+
+        result.update(String.format("%s-modifiedName", result.getMemberName()));
+
         return result;
     }
 

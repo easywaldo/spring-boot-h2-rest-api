@@ -20,6 +20,17 @@ public class SampleController {
     @GetMapping(value ="repeatableTest")
     public void repeatableReadTest() {
         Member member = this.memberService.findMember();
+    }
 
+    @ApiOperation(value = "unCommittedTest Test", notes = "")
+    @GetMapping(value ="unCommittedTest")
+    public void unCommittedTest() throws InterruptedException {
+        this.memberService.findMemberV2();
+    }
+
+    @ApiOperation(value = "unCommittedTest Test", notes = "")
+    @GetMapping(value ="unCommittedReadTest")
+    public void unCommittedReadTest() {
+        this.memberService.findMemberV3();
     }
 }
