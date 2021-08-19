@@ -2,6 +2,8 @@ package com.approval.document.documentapproval.domain.service;
 
 import com.approval.document.documentapproval.config.security.AuthTokenFilter;
 import com.approval.document.documentapproval.domain.entity.Member;
+import com.approval.document.documentapproval.domain.entity.MemberForBulk;
+import com.approval.document.documentapproval.domain.entity.repository.BulkRepository;
 import com.approval.document.documentapproval.domain.entity.repository.MemberRepository;
 import com.approval.document.documentapproval.dto.member.JoinMemberRequestDto;
 import com.approval.document.documentapproval.dto.member.MemberResponseDto;
@@ -15,13 +17,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.FlushModeType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final BulkRepository<MemberForBulk, Integer> bulkRepository;
     private final DocumentQueryGenerator queryGenerator;
     private final EntityManager entityManager;
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
@@ -31,6 +36,7 @@ public class MemberService {
                          DocumentQueryGenerator documentQueryGenerator,
                          EntityManager entityManager) {
         this.memberRepository = memberRepository;
+        this.bulkRepository = new BulkRepository(MemberForBulk.class, entityManager);
         this.queryGenerator = documentQueryGenerator;
         this.entityManager = entityManager;
     }
@@ -103,6 +109,25 @@ public class MemberService {
         Member member1 = this.memberRepository.findById(1).get();
         System.out.println(String.format("findMemberV4 memberName: %s", member1.getMemberName()));
         return member1;
+    }
+
+    @Transactional(transactionManager = "easyTransactionManagerFactory", readOnly = false)
+    public void bulkMember() {
+        IntStream n = IntStream.range(1, 1000);
+        List<MemberForBulk> bulkMember = new ArrayList<>();
+        for (int i : n.toArray()) {
+            bulkMember.add(MemberForBulk.builder()
+                .memberSeq(i)
+                .userPwd(String.format("password_%s", i))
+                .memberName(String.format("member-%s", i))
+                .userId(String.format("user-id-%s", i))
+                .build());
+        }
+
+        bulkRepository.saveInBatch(bulkMember);
+        //bulkRepository.saveAll(bulkMember);
+
+
     }
 
 

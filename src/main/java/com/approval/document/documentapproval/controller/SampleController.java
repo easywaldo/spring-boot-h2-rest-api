@@ -33,4 +33,12 @@ public class SampleController {
     public void unCommittedReadTest() {
         this.memberService.findMemberV3();
     }
+
+    @ApiOperation(value = "bulkInsert Test", notes = "")
+    @GetMapping(value ="bulkInsert")
+    public void bulkInsert() {
+        this.memberService.bulkMember();
+    }
+
+
 }
